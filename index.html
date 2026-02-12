@@ -216,6 +216,79 @@
             justify-content: space-between;
             align-items: center;
         }
+        
+        .staple-item {
+            background: #fafafa;
+            padding: 12px 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .staple-item.checked {
+            background: #e8f5e9;
+            opacity: 0.7;
+        }
+        .staple-item.checked .staple-name {
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .staple-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #563F57;
+        }
+        
+        .staple-content {
+            flex: 1;
+        }
+        
+        .staple-name {
+            font-weight: 500;
+            color: #3C4453;
+            margin-bottom: 2px;
+        }
+        
+        .staple-brand {
+            font-size: 0.85em;
+            color: #999;
+        }
+        
+        .staple-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .staple-link {
+            background-color: #F4D9DC;
+            color: #563F57;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        
+        .staple-link:hover {
+            background-color: #E8C2C8;
+        }
+        
+        .staple-remove {
+            background: #ffcccc;
+            color: #c00;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8em;
+        }
         .item-name {
             flex: 1;
             font-weight: 500;
@@ -381,26 +454,44 @@
     <!-- TAB 4: WOOLWORTHS -->
     <div id="woolworths" class="tab-content">
         <div class="section">
-            <h2>🛍️ Woolworths Shopping</h2>
-            <p style="color: #666; margin-bottom: 20px;">Click the buttons below to open Woolworths search for each item.</p>
+            <h2>🛍️ Household Staples (Always There)</h2>
+            <p style="color: #666; margin-bottom: 20px;">Your recurring household items with preferred brands. Check off as you shop.</p>
             
-            <h3 style="margin-top: 0;">Your Shopping Items with Woolworths Links</h3>
+            <h3 style="margin-top: 0;">Add New Staple</h3>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <input type="text" id="staple-name" placeholder="Item (e.g., Toilet Paper)" style="flex: 1;">
+                <input type="text" id="staple-brand" placeholder="Brand (e.g., Kleenex)" style="flex: 1;">
+                <button class="button" onclick="addStaple()">Add Staple</button>
+            </div>
+
+            <h3>Your Staples</h3>
+            <div id="staples-list" style="display: grid; gap: 10px;">
+                <div class="empty-state">
+                    <p>No staples yet. Add your go-to household items above.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🛒 This Week's Meal Items</h2>
+            <p style="color: #666; margin-bottom: 20px;">Ingredients from your meals. Clear after checkout.</p>
+            
             <div class="shopping-grid" id="woolworths-list">
                 <div class="empty-state">
                     <p>No items in shopping list yet.</p>
                 </div>
             </div>
+        </div>
 
-            <div style="margin-top: 30px; background-color: #fff8dc; padding: 20px; border-radius: 8px; border-left: 4px solid #F4D9DC;">
-                <h3 style="margin-top: 0;">How This Works</h3>
-                <ol style="margin-left: 20px; color: #666;">
-                    <li>Click "Search Woolworths" for each item</li>
-                    <li>Woolworths.com.au opens and searches for that item</li>
-                    <li>Click the product → Add to cart</li>
-                    <li>Come back here, click next item</li>
-                    <li>Once all items added, go to Woolworths cart and checkout</li>
-                </ol>
-            </div>
+        <div class="section" style="background-color: #fff8dc; border-left: 4px solid #F4D9DC;">
+            <h3 style="margin-top: 0;">How This Works</h3>
+            <ol style="margin-left: 20px; color: #666;">
+                <li><strong>Staples:</strong> Check off items you pick up each week. They stay forever.</li>
+                <li><strong>Weekly Items:</strong> Search and add meal ingredients to your cart.</li>
+                <li>Click "Search Woolworths" to open each item on Woolworths.com.au</li>
+                <li>Click the product → Add to cart</li>
+                <li>Once done, come back and clear the weekly list (staples stay!)</li>
+            </ol>
         </div>
     </div>
 
@@ -458,7 +549,8 @@
             { id: 6, name: 'Special Burger Pickles - Coles', qty: '5', unit: 'g' },
             { id: 7, name: 'Special Burger Sauce - Coles Brand', qty: '10', unit: 'ml' },
             { id: 8, name: 'Tomato', qty: '15', unit: 'g' }
-        ]
+        ],
+        staples: []
     };
 
     // Initialize from localStorage
@@ -501,6 +593,7 @@
         renderHarveysMeals();
         renderShoppingList();
         renderWoolworthsList();
+        renderStaples();
     }
 
     function renderJadesMeals() {
@@ -693,6 +786,76 @@
                         <div class="item-qty">${item.qty} ${item.unit}</div>
                     </div>
                     <a href="${searchUrl}" target="_blank" class="woolworths-link">Search Woolworths</a>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    function addStaple() {
+        const name = document.getElementById('staple-name').value.trim();
+        const brand = document.getElementById('staple-brand').value.trim();
+
+        if (!name) {
+            alert('Please enter an item name');
+            return;
+        }
+
+        const staple = {
+            id: Date.now(),
+            name: name,
+            brand: brand || 'Any brand',
+            checked: false
+        };
+
+        meals.staples.push(staple);
+        saveData();
+        renderStaples();
+
+        document.getElementById('staple-name').value = '';
+        document.getElementById('staple-brand').value = '';
+        document.getElementById('staple-name').focus();
+    }
+
+    function toggleStaple(id) {
+        const staple = meals.staples.find(s => s.id === id);
+        if (staple) {
+            staple.checked = !staple.checked;
+            saveData();
+            renderStaples();
+        }
+    }
+
+    function removeStaple(id) {
+        meals.staples = meals.staples.filter(s => s.id !== id);
+        saveData();
+        renderStaples();
+    }
+
+    function renderStaples() {
+        const container = document.getElementById('staples-list');
+        
+        if (meals.staples.length === 0) {
+            container.innerHTML = '<div class="empty-state"><p>No staples yet. Add your go-to household items above.</p></div>';
+            return;
+        }
+
+        container.innerHTML = '';
+        meals.staples.forEach(staple => {
+            const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(staple.name + ' ' + staple.brand)}`;
+            const html = `
+                <div class="staple-item ${staple.checked ? 'checked' : ''}">
+                    <input type="checkbox" class="staple-checkbox" 
+                        ${staple.checked ? 'checked' : ''} 
+                        onchange="toggleStaple(${staple.id})">
+                    <div class="staple-content">
+                        <div class="staple-name">${staple.name}</div>
+                        <div class="staple-brand">${staple.brand}</div>
+                    </div>
+                    <div class="staple-actions">
+                        <a href="${searchUrl}" target="_blank" class="staple-link">Search</a>
+                        <button class="staple-remove" onclick="removeStaple(${staple.id})">Remove</button>
+                    </div>
                 </div>
             `;
             container.insertAdjacentHTML('beforeend', html);
