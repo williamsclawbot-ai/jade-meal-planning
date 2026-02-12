@@ -21,7 +21,7 @@
             margin: 0 auto;
             padding: 20px;
         }
-        
+
         /* HEADER */
         .header {
             background: linear-gradient(135deg, #563F57 0%, #F4D9DC 100%);
@@ -40,7 +40,7 @@
             font-size: 0.95em;
             opacity: 0.95;
         }
-        
+
         /* TAB NAVIGATION */
         .tabs {
             display: grid;
@@ -69,7 +69,7 @@
             color: white;
             box-shadow: 0 4px 12px rgba(86, 63, 87, 0.3);
         }
-        
+
         /* TAB CONTENT */
         .tab-content {
             display: none;
@@ -82,7 +82,7 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
+
         /* SECTIONS */
         .section {
             background: white;
@@ -92,7 +92,7 @@
             border-left: 4px solid #F4D9DC;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
-        
+
         h2 {
             color: #563F57;
             font-size: 1.5em;
@@ -107,7 +107,7 @@
             padding-bottom: 10px;
             border-bottom: 2px solid #F4D9DC;
         }
-        
+
         /* MEAL GRID */
         .week-grid {
             display: grid;
@@ -129,7 +129,7 @@
             border-bottom: 2px solid #F4D9DC;
             font-size: 1.1em;
         }
-        
+
         /* DAILY MACRO SUMMARY */
         .daily-macros {
             background: linear-gradient(135deg, #F4D9DC 0%, #fff 100%);
@@ -174,7 +174,7 @@
             color: #c00;
             font-weight: 600;
         }
-        
+
         .meal-item {
             display: flex;
             gap: 10px;
@@ -200,7 +200,7 @@
             border-color: #F4D9DC;
             box-shadow: 0 0 0 3px rgba(244, 217, 220, 0.2);
         }
-        
+
         /* SHOPPING LIST */
         .shopping-grid {
             display: grid;
@@ -216,7 +216,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .staple-item {
             background: #fafafa;
             padding: 12px 15px;
@@ -234,34 +234,34 @@
             text-decoration: line-through;
             color: #999;
         }
-        
+
         .staple-checkbox {
             width: 20px;
             height: 20px;
             cursor: pointer;
             accent-color: #563F57;
         }
-        
+
         .staple-content {
             flex: 1;
         }
-        
+
         .staple-name {
             font-weight: 500;
             color: #3C4453;
             margin-bottom: 2px;
         }
-        
+
         .staple-brand {
             font-size: 0.85em;
             color: #999;
         }
-        
+
         .staple-actions {
             display: flex;
             gap: 8px;
         }
-        
+
         .staple-link {
             background-color: #F4D9DC;
             color: #563F57;
@@ -274,11 +274,11 @@
             border: none;
             transition: all 0.2s ease;
         }
-        
+
         .staple-link:hover {
             background-color: #E8C2C8;
         }
-        
+
         .staple-remove {
             background: #ffcccc;
             color: #c00;
@@ -315,7 +315,7 @@
             background-color: #E8C2C8;
             transform: translateY(-1px);
         }
-        
+
         /* INPUTS */
         input[type="text"], input[type="number"], select {
             padding: 8px;
@@ -329,7 +329,7 @@
             border-color: #F4D9DC;
             box-shadow: 0 0 0 3px rgba(244, 217, 220, 0.2);
         }
-        
+
         .button {
             background-color: #563F57;
             color: white;
@@ -344,7 +344,7 @@
             background-color: #452d45;
             transform: translateY(-2px);
         }
-        
+
         .empty-state {
             background: #f9f9f9;
             padding: 40px;
@@ -352,7 +352,7 @@
             text-align: center;
             color: #999;
         }
-        
+
         .footer {
             text-align: center;
             margin-top: 50px;
@@ -361,7 +361,7 @@
             color: #999;
             font-size: 0.9em;
         }
-        
+
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .header h1 {
@@ -390,6 +390,7 @@
         <button class="tab-button" onclick="openTab(event, 'harveys-meals')">👶 Harvey's Meals</button>
         <button class="tab-button" onclick="openTab(event, 'shopping')">🛒 Shopping List</button>
         <button class="tab-button" onclick="openTab(event, 'woolworths')">🛍️ Woolworths</button>
+        <button class="tab-button" onclick="openTab(event, 'harveys-options')">👶 Harvey's Options</button>
     </div>
 
     <!-- TAB 1: JADE'S MEALS -->
@@ -397,11 +398,11 @@
         <div class="section">
             <h2>Jade's Weekly Meal Plan + Macros</h2>
             <p style="color: #666; margin-bottom: 20px;">Plan your meals for the week. See your daily macro balance as you add meals.</p>
-            
+
             <div class="week-grid" id="jades-week">
                 <!-- Generated by JavaScript -->
             </div>
-            
+
             <div style="text-align: center; margin-top: 20px;">
                 <button class="button" onclick="clearJadesMeals()">Clear All Meals</button>
             </div>
@@ -413,11 +414,11 @@
         <div class="section">
             <h2>Harvey's Weekly Meal Plan</h2>
             <p style="color: #666; margin-bottom: 20px;">Plan Harvey's meals for the week.</p>
-            
+
             <div class="week-grid" id="harveys-week">
                 <!-- Generated by JavaScript -->
             </div>
-            
+
             <div style="text-align: center; margin-top: 20px;">
                 <button class="button" onclick="clearHarveysMeals()">Clear All Meals</button>
             </div>
@@ -429,7 +430,7 @@
         <div class="section">
             <h2>Shopping List</h2>
             <p style="color: #666; margin-bottom: 20px;">Items extracted from your meal plans. Add more manually as needed.</p>
-            
+
             <h3 style="margin-top: 0;">Add Item Manually</h3>
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                 <input type="text" id="item-name" placeholder="Item name (e.g., Chicken breast)" style="flex: 1;">
@@ -444,7 +445,7 @@
                     <p>No items yet. Add meals or items manually above.</p>
                 </div>
             </div>
-            
+
             <div style="text-align: center; margin-top: 20px;">
                 <button class="button" onclick="clearShoppingList()">Clear Shopping List</button>
             </div>
@@ -456,7 +457,7 @@
         <div class="section">
             <h2>🛍️ Household Staples (Always There)</h2>
             <p style="color: #666; margin-bottom: 20px;">Your recurring household items with preferred brands. Check off as you shop.</p>
-            
+
             <h3 style="margin-top: 0;">Add New Staple</h3>
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                 <input type="text" id="staple-name" placeholder="Item (e.g., Toilet Paper)" style="flex: 1;">
@@ -475,7 +476,7 @@
         <div class="section">
             <h2>🛒 This Week's Meal Items</h2>
             <p style="color: #666; margin-bottom: 20px;">Ingredients from your meals. Clear after checkout.</p>
-            
+
             <div class="shopping-grid" id="woolworths-list">
                 <div class="empty-state">
                     <p>No items in shopping list yet.</p>
@@ -495,6 +496,91 @@
         </div>
     </div>
 
+    <!-- TAB 5: HARVEY'S OPTIONS -->
+    <div id="harveys-options" class="tab-content">
+        <div class="section">
+            <h2>👶 Harvey's Meal Options</h2>
+            <p style="color: #666; margin-bottom: 20px;">All meal options organized by category. Check what works, note what needs changes.</p>
+            
+            <h3>🥣 Carb/Protein Options</h3>
+            <div style="display: grid; gap: 10px; margin: 15px 0; columns: 2;">
+                <label><input type="checkbox"> ABC Muffins</label>
+                <label><input type="checkbox"> Banana Muffins</label>
+                <label><input type="checkbox"> Muesli Bar</label>
+                <label><input type="checkbox"> Carmans Oat Bar</label>
+                <label><input type="checkbox"> Rice Bubble Bars (homemade)</label>
+                <label><input type="checkbox"> Ham & Cheese Scroll</label>
+                <label><input type="checkbox"> Pizza Scroll</label>
+                <label><input type="checkbox"> Cheese & Vegemite (+backup)</label>
+                <label><input type="checkbox"> Ham & Cheese Sandwich</label>
+                <label><input type="checkbox"> Nut Butter & Honey (+backup)</label>
+                <label><input type="checkbox"> Pasta & Boiled Egg (+backup)</label>
+                <label><input type="checkbox"> Avo & Cream Cheese (+backup)</label>
+                <label><input type="checkbox"> Sweet Potato & Chicken</label>
+                <label><input type="checkbox"> Choc Chip Muffins</label>
+                <label><input type="checkbox"><strong> Weekly New Muffin</strong></label>
+                <label><input type="checkbox"><strong> Weekly New Bar</strong></label>
+            </div>
+
+            <h3>🍎 Fruit Options</h3>
+            <div style="display: grid; gap: 10px; margin: 15px 0; columns: 2;">
+                <label><input type="checkbox"> Apple (introduce)</label>
+                <label><input type="checkbox"> Pear</label>
+                <label><input type="checkbox"> Oranges</label>
+                <label><input type="checkbox"> Banana</label>
+                <label><input type="checkbox"> Grapes</label>
+                <label><input type="checkbox"> Strawberries</label>
+                <label><input type="checkbox"> Raspberries</label>
+                <label><input type="checkbox"> Blueberries</label>
+                <label><input type="checkbox"> Kiwi Fruit</label>
+                <label><input type="checkbox"> Plum</label>
+                <label><input type="checkbox"> Nectarine</label>
+            </div>
+
+            <h3>🥦 Vegetable Options</h3>
+            <div style="display: grid; gap: 10px; margin: 15px 0; columns: 2;">
+                <label><input type="checkbox"><strong> Mixed Frozen Veg ⭐ LOVES</strong></label>
+                <label><input type="checkbox"> Cucumber (keep trying)</label>
+                <label><input type="checkbox"> Tomato (keep trying)</label>
+                <label><input type="checkbox"> Capsicum</label>
+                <label><input type="checkbox"> Broccoli (new)</label>
+                <label><input type="checkbox"> Green Beans (new)</label>
+                <label><input type="checkbox"> Roasted Sweet Potato (new)</label>
+            </div>
+
+            <h3>🍪 Crunch Options</h3>
+            <div style="display: grid; gap: 10px; margin: 15px 0; columns: 2;">
+                <label><input type="checkbox"> Star Crackers</label>
+                <label><input type="checkbox"> Rice Cakes</label>
+                <label><input type="checkbox"> Pikelets/Pancakes</label>
+                <label><input type="checkbox"> Veggie Chips</label>
+                <label><input type="checkbox"> Soft Pretzels</label>
+                <label><input type="checkbox"> Cheese Crackers</label>
+                <label><input type="checkbox"> Breadsticks/Grissini</label>
+            </div>
+
+            <h3>🥤 Afternoon Snacks (2:30pm)</h3>
+            <div style="display: grid; gap: 10px; margin: 15px 0; columns: 2;">
+                <label><input type="checkbox"> Smoothie (banana, berries, yogurt, milk)</label>
+                <label><input type="checkbox"> Yogurt + Fruit</label>
+                <label><input type="checkbox"> Crackers + Cheese</label>
+                <label><input type="checkbox"> Toast + Nut Butter</label>
+                <label><input type="checkbox"> Fruit Salad</label>
+                <label><input type="checkbox"> Rice Cakes + Honey</label>
+            </div>
+
+            <h3>✅ Everyday Item (Lunch Constant)</h3>
+            <div style="display: grid; gap: 10px; margin: 15px 0;">
+                <label><input type="checkbox" checked> <strong>Yogurt (every lunch)</strong></label>
+            </div>
+
+            <div style="background: #FFF8DC; padding: 15px; border-radius: 6px; margin-top: 20px; border-left: 4px solid #F4D9DC;">
+                <p style="color: #666;"><strong>📝 How to Use This:</strong></p>
+                <p style="color: #666; font-size: 0.95em;">Check the boxes for options you're using. Items marked (+backup) = pair with a backup option until Harvey is ready to eat it solo. Once you've checked what works, I'll build the weekly lunch rotation.</p>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 <div class="footer">
@@ -507,7 +593,7 @@
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const jadesMealTypes = ['Breakfast', 'Lunch', 'Snack', 'Dinner', 'Dessert'];
     const harveysMealTypes = ['Breakfast', 'Lunch', 'Snack', 'Dinner'];
-    
+
     const JADE_TARGETS = {
         calories: 1550,
         protein: 120,
@@ -534,7 +620,7 @@
             ]
         }
     };
-    
+
     let meals = {
         jades: {
             'Friday-Dinner': 'Double Cheeseburger'
@@ -572,7 +658,7 @@
 
     function calculateDayMacros(day) {
         let totals = { calories: 0, protein: 0, fats: 0, carbs: 0 };
-        
+
         jadesMealTypes.forEach(mealType => {
             const key = `${day}-${mealType}`;
             const mealName = meals.jades[key];
@@ -584,7 +670,7 @@
                 totals.carbs += meal.carbs;
             }
         });
-        
+
         return totals;
     }
 
@@ -608,7 +694,7 @@
                 fats: Math.max(0, JADE_TARGETS.fats - dayMacros.fats),
                 carbs: Math.max(0, JADE_TARGETS.carbs - dayMacros.carbs)
             };
-            
+
             const pctCal = Math.min(100, (dayMacros.calories / JADE_TARGETS.calories) * 100);
             const pctPro = Math.min(100, (dayMacros.protein / JADE_TARGETS.protein) * 100);
             const pctFat = Math.min(100, (dayMacros.fats / JADE_TARGETS.fats) * 100);
@@ -616,7 +702,7 @@
 
             let dayHtml = `<div class="day-card">
                 <div class="day-header">${day}</div>
-                
+
                 <div class="daily-macros">
                     <div class="macro-row">
                         <div class="macro-label">Cal</div>
@@ -639,15 +725,15 @@
                         <div class="macro-remaining ${remaining.carbs < 20 ? 'low' : ''}">${remaining.carbs}g</div>
                     </div>
                 </div>`;
-            
+
             jadesMealTypes.forEach(mealType => {
                 const key = `${day}-${mealType}`;
                 const value = meals.jades[key] || '';
                 dayHtml += `
                     <div class="meal-item">
                         <div class="meal-label">${mealType}</div>
-                        <input type="text" class="meal-input" 
-                            data-key="${key}" 
+                        <input type="text" class="meal-input"
+                            data-key="${key}"
                             data-type="jades"
                             value="${value}"
                             onchange="updateMeal(this)">
@@ -667,15 +753,15 @@
         days.forEach(day => {
             let dayHtml = `<div class="day-card">
                 <div class="day-header">${day}</div>`;
-            
+
             harveysMealTypes.forEach(mealType => {
                 const key = `${day}-${mealType}`;
                 const value = meals.harveys[key] || '';
                 dayHtml += `
                     <div class="meal-item">
                         <div class="meal-label">${mealType}</div>
-                        <input type="text" class="meal-input" 
-                            data-key="${key}" 
+                        <input type="text" class="meal-input"
+                            data-key="${key}"
                             data-type="harveys"
                             value="${value}"
                             onchange="updateMeal(this)">
@@ -747,7 +833,7 @@
 
     function renderShoppingList() {
         const container = document.getElementById('shopping-list');
-        
+
         if (meals.shopping.length === 0) {
             container.innerHTML = '<div class="empty-state"><p>No items yet.</p></div>';
             return;
@@ -770,7 +856,7 @@
 
     function renderWoolworthsList() {
         const container = document.getElementById('woolworths-list');
-        
+
         if (meals.shopping.length === 0) {
             container.innerHTML = '<div class="empty-state"><p>No items in shopping list yet.</p></div>';
             return;
@@ -834,7 +920,7 @@
 
     function renderStaples() {
         const container = document.getElementById('staples-list');
-        
+
         if (meals.staples.length === 0) {
             container.innerHTML = '<div class="empty-state"><p>No staples yet. Add your go-to household items above.</p></div>';
             return;
@@ -845,8 +931,8 @@
             const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(staple.name + ' ' + staple.brand)}`;
             const html = `
                 <div class="staple-item ${staple.checked ? 'checked' : ''}">
-                    <input type="checkbox" class="staple-checkbox" 
-                        ${staple.checked ? 'checked' : ''} 
+                    <input type="checkbox" class="staple-checkbox"
+                        ${staple.checked ? 'checked' : ''}
                         onchange="toggleStaple(${staple.id})">
                     <div class="staple-content">
                         <div class="staple-name">${staple.name}</div>
@@ -873,10 +959,10 @@
     function openTab(evt, tabName) {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
-        
+
         document.getElementById(tabName).classList.add('active');
         evt.currentTarget.classList.add('active');
-        
+
         window.scrollTo(0, 0);
     }
 
