@@ -456,9 +456,20 @@
     const harveysMealTypes = ['Breakfast', 'Lunch', 'Snack', 'Dinner'];
     
     let meals = {
-        jades: {},
+        jades: {
+            'Friday-Dinner': 'Double Cheeseburger'
+        },
         harveys: {},
-        shopping: []
+        shopping: [
+            { id: 1, name: 'Extra Lean Beef Mince (5 Star)', qty: '180', unit: 'g' },
+            { id: 2, name: '50% Less Fat Cheese Slice - Bega', qty: '1', unit: 'slice' },
+            { id: 3, name: 'Brioche Bun - Bakery Du Jour', qty: '1', unit: 'bun' },
+            { id: 4, name: 'Lettuce', qty: '10', unit: 'g' },
+            { id: 5, name: 'Onion', qty: '15', unit: 'g' },
+            { id: 6, name: 'Special Burger Pickles - Coles', qty: '5', unit: 'g' },
+            { id: 7, name: 'Special Burger Sauce - Coles Brand', qty: '10', unit: 'ml' },
+            { id: 8, name: 'Tomato', qty: '15', unit: 'g' }
+        ]
     };
 
     // Initialize from localStorage
