@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Jade's Meal Planning & Macro Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #3C4453;
+            background: linear-gradient(135deg, #FBECDB 0%, #f5f1e8 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* HEADER */
+        .header {
+            background: linear-gradient(135deg, #563F57 0%, #F4D9DC 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 0.95em;
+            opacity: 0.95;
+        }
+        
+        /* TAB NAVIGATION */
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .tab-button {
+            background: white;
+            border: none;
+            padding: 12px 16px;
+            font-size: 0.9em;
+            cursor: pointer;
+            border-radius: 8px;
+            color: #563F57;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .tab-button:hover {
+            background: #f5f1e8;
+            transform: translateY(-2px);
+        }
+        .tab-button.active {
+            background: #563F57;
+            color: white;
+            box-shadow: 0 4px 12px rgba(86, 63, 87, 0.3);
+        }
+        
+        /* TAB CONTENT */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* SECTIONS */
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #F4D9DC;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        h2 {
+            color: #563F57;
+            font-size: 1.5em;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #563F57;
+            font-size: 1.1em;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #F4D9DC;
+        }
+        
+        /* MEAL GRID */
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .day-card {
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .day-header {
+            font-weight: 600;
+            color: #563F57;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #F4D9DC;
+        }
+        .meal-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: flex-start;
+        }
+        .meal-label {
+            font-weight: 600;
+            font-size: 0.85em;
+            color: #666;
+            min-width: 70px;
+        }
+        .meal-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-family: inherit;
+        }
+        .meal-input:focus {
+            outline: none;
+            border-color: #F4D9DC;
+            box-shadow: 0 0 0 3px rgba(244, 217, 220, 0.2);
+        }
+        
+        /* MACRO TRACKING */
+        .macro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .macro-card {
+            background: linear-gradient(135deg, #F4D9DC 0%, #fff 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #F4D9DC;
+        }
+        .macro-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .macro-target {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #563F57;
+            margin-bottom: 5px;
+        }
+        .macro-unit {
+            font-size: 0.8em;
+            color: #999;
+        }
+        
+        /* SHOPPING LIST */
+        .shopping-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .shopping-item {
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .item-name {
+            flex: 1;
+            font-weight: 500;
+            color: #3C4453;
+        }
+        .item-qty {
+            font-size: 0.9em;
+            color: #999;
+            margin-right: 10px;
+        }
+        .woolworths-link {
+            background-color: #F4D9DC;
+            color: #563F57;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.85em;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+        }
+        .woolworths-link:hover {
+            background-color: #E8C2C8;
+            transform: translateY(-1px);
+        }
+        
+        /* INPUTS */
+        input[type="text"], input[type="number"], select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-family: inherit;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: #F4D9DC;
+            box-shadow: 0 0 0 3px rgba(244, 217, 220, 0.2);
+        }
+        
+        .button {
+            background-color: #563F57;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .button:hover {
+            background-color: #452d45;
+            transform: translateY(-2px);
+        }
+        
+        .empty-state {
+            background: #f9f9f9;
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            color: #999;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #F4D9DC;
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            .tabs {
+                grid-template-columns: 1fr 1fr;
+            }
+            .week-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🍽️ Jade's Meal Planning & Macro Tracking</h1>
+        <p>Weekly meal planning, macro tracking, and Woolworths shopping list</p>
+    </div>
+
+    <!-- TAB NAVIGATION -->
+    <div class="tabs">
+        <button class="tab-button active" onclick="openTab(event, 'jades-meals')">👩 Jade's Meals</button>
+        <button class="tab-button" onclick="openTab(event, 'harveys-meals')">👶 Harvey's Meals</button>
+        <button class="tab-button" onclick="openTab(event, 'macros')">💪 Macros</button>
+        <button class="tab-button" onclick="openTab(event, 'shopping')">🛒 Shopping List</button>
+        <button class="tab-button" onclick="openTab(event, 'woolworths')">🛍️ Woolworths</button>
+    </div>
+
+    <!-- TAB 1: JADE'S MEALS -->
+    <div id="jades-meals" class="tab-content active">
+        <div class="section">
+            <h2>Jade's Weekly Meal Plan</h2>
+            <p style="color: #666; margin-bottom: 20px;">Plan your meals for the week. Include breakfast, lunch, snack, dinner, and dessert.</p>
+            
+            <div class="week-grid" id="jades-week">
+                <!-- Generated by JavaScript -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="button" onclick="clearJadesMeals()">Clear All Meals</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: HARVEY'S MEALS -->
+    <div id="harveys-meals" class="tab-content">
+        <div class="section">
+            <h2>Harvey's Weekly Meal Plan</h2>
+            <p style="color: #666; margin-bottom: 20px;">Plan Harvey's meals for the week. Include breakfast, lunch, snack, and dinner.</p>
+            
+            <div class="week-grid" id="harveys-week">
+                <!-- Generated by JavaScript -->
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="button" onclick="clearHarveysMeals()">Clear All Meals</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: MACROS -->
+    <div id="macros" class="tab-content">
+        <div class="section">
+            <h2>Jade's Daily Macro Targets</h2>
+            <p style="color: #666; margin-bottom: 20px;">Track your daily nutritional targets.</p>
+            
+            <div class="macro-grid">
+                <div class="macro-card">
+                    <div class="macro-label">Calories</div>
+                    <div class="macro-target">1550</div>
+                    <div class="macro-unit">kcal/day</div>
+                </div>
+                <div class="macro-card">
+                    <div class="macro-label">Protein</div>
+                    <div class="macro-target">120<span style="font-size: 0.6em;">g</span></div>
+                    <div class="macro-unit">per day</div>
+                </div>
+                <div class="macro-card">
+                    <div class="macro-label">Fats</div>
+                    <div class="macro-target">45<span style="font-size: 0.6em;">g</span></div>
+                    <div class="macro-unit">per day</div>
+                </div>
+                <div class="macro-card">
+                    <div class="macro-label">Carbs</div>
+                    <div class="macro-target">166<span style="font-size: 0.6em;">g</span></div>
+                    <div class="macro-unit">per day</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>How to Use This Dashboard</h2>
+            <ol style="margin-left: 20px; color: #666;">
+                <li><strong>Add meals:</strong> Go to "Jade's Meals" and type each meal into the day cards</li>
+                <li><strong>Build shopping list:</strong> As you add meals, we auto-generate ingredients</li>
+                <li><strong>Woolworths shopping:</strong> Click links to add items to your Woolworths cart</li>
+                <li><strong>Track macros:</strong> Your daily targets are shown above (you can track manually or use Myfitnesspal)</li>
+            </ol>
+        </div>
+
+        <div class="section" style="background-color: #fff8dc; border-left-color: #F4D9DC;">
+            <h3 style="border-bottom-color: #F4D9DC;">💡 Pro Tips</h3>
+            <ul style="margin-left: 20px; color: #666;">
+                <li><strong>Batch cooking:</strong> Plan similar proteins across week for easier prep</li>
+                <li><strong>Thermomix-friendly:</strong> Note which meals can use the Thermomix</li>
+                <li><strong>Harvey's meals:</strong> Keep simple and repeatable (as you mentioned)</li>
+                <li><strong>GF tracking:</strong> You manage gluten-free yourself in meal names</li>
+                <li><strong>Sunday prep:</strong> Use this dashboard on Saturday/Sunday to plan the week</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- TAB 4: SHOPPING LIST -->
+    <div id="shopping" class="tab-content">
+        <div class="section">
+            <h2>Auto-Generated Shopping List</h2>
+            <p style="color: #666; margin-bottom: 20px;">This list is built from your meal plans above. Add items manually or wait until you've filled in meals.</p>
+            
+            <h3 style="margin-top: 0;">Add Item Manually</h3>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <input type="text" id="item-name" placeholder="Item name (e.g., Chicken breast)" style="flex: 1;">
+                <input type="number" id="item-qty" placeholder="Qty" style="width: 80px;">
+                <input type="text" id="item-unit" placeholder="Unit (e.g., kg)" style="width: 80px;">
+                <button class="button" onclick="addShoppingItem()">Add Item</button>
+            </div>
+
+            <h3>Shopping List</h3>
+            <div class="shopping-grid" id="shopping-list">
+                <div class="empty-state">
+                    <p>No items yet. Add meals to Jade's/Harvey's plans, or add items manually above.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="button" onclick="clearShoppingList()">Clear Shopping List</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: WOOLWORTHS -->
+    <div id="woolworths" class="tab-content">
+        <div class="section">
+            <h2>🛍️ Woolworths Shopping</h2>
+            <p style="color: #666; margin-bottom: 20px;">Click the buttons below to open Woolworths search for each item. Add to cart, review, then checkout.</p>
+            
+            <h3 style="margin-top: 0;">Your Shopping Items with Woolworths Links</h3>
+            <div class="shopping-grid" id="woolworths-list">
+                <div class="empty-state">
+                    <p>No items in shopping list yet. Go to "Shopping List" tab to add items.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; background-color: #fff8dc; padding: 20px; border-radius: 8px; border-left: 4px solid #F4D9DC;">
+                <h3 style="margin-top: 0;">How This Works</h3>
+                <ol style="margin-left: 20px; color: #666;">
+                    <li>Click "Search Woolworths" for each item</li>
+                    <li>Woolworths.com.au opens and searches for that item</li>
+                    <li>Click the product → Add to cart</li>
+                    <li>Come back here, click next item</li>
+                    <li>Once all items added, go to Woolworths cart and checkout</li>
+                </ol>
+                <p style="margin-top: 15px; font-size: 0.95em;"><strong>Future:</strong> We'll automate cart-adding, but for now this workflow is fast and safe.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p><strong>🍽️ Jade's Meal Planning & Macro Dashboard</strong></p>
+    <p>For: Jade Williams</p>
+    <p>Status: Ready to use</p>
+    <p style="margin-top: 15px; font-size: 0.85em;">💙 Give John your meal ideas and he'll help populate this. Update anytime.</p>
+</div>
+
+<script>
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const jadesMealTypes = ['Breakfast', 'Lunch', 'Snack', 'Dinner', 'Dessert'];
+    const harveysMealTypes = ['Breakfast', 'Lunch', 'Snack', 'Dinner'];
+    
+    let meals = {
+        jades: {},
+        harveys: {},
+        shopping: []
+    };
+
+    // Initialize from localStorage
+    function loadData() {
+        const saved = localStorage.getItem('jadesMealData');
+        if (saved) {
+            try {
+                meals = JSON.parse(saved);
+            } catch (e) {
+                console.log('No saved data');
+            }
+        }
+        renderAll();
+    }
+
+    function saveData() {
+        localStorage.setItem('jadesMealData', JSON.stringify(meals));
+    }
+
+    function renderAll() {
+        renderJadesMeals();
+        renderHarveysMeals();
+        renderShoppingList();
+        renderWoolworthsList();
+    }
+
+    function renderJadesMeals() {
+        const container = document.getElementById('jades-week');
+        container.innerHTML = '';
+
+        days.forEach(day => {
+            let dayHtml = `<div class="day-card">
+                <div class="day-header">${day}</div>`;
+            
+            jadesMealTypes.forEach(mealType => {
+                const key = `${day}-${mealType}`;
+                const value = meals.jades[key] || '';
+                dayHtml += `
+                    <div class="meal-item">
+                        <div class="meal-label">${mealType}</div>
+                        <input type="text" class="meal-input" 
+                            data-key="${key}" 
+                            data-type="jades"
+                            value="${value}"
+                            onchange="updateMeal(this)">
+                    </div>
+                `;
+            });
+
+            dayHtml += `</div>`;
+            container.insertAdjacentHTML('beforeend', dayHtml);
+        });
+    }
+
+    function renderHarveysMeals() {
+        const container = document.getElementById('harveys-week');
+        container.innerHTML = '';
+
+        days.forEach(day => {
+            let dayHtml = `<div class="day-card">
+                <div class="day-header">${day}</div>`;
+            
+            harveysMealTypes.forEach(mealType => {
+                const key = `${day}-${mealType}`;
+                const value = meals.harveys[key] || '';
+                dayHtml += `
+                    <div class="meal-item">
+                        <div class="meal-label">${mealType}</div>
+                        <input type="text" class="meal-input" 
+                            data-key="${key}" 
+                            data-type="harveys"
+                            value="${value}"
+                            onchange="updateMeal(this)">
+                    </div>
+                `;
+            });
+
+            dayHtml += `</div>`;
+            container.insertAdjacentHTML('beforeend', dayHtml);
+        });
+    }
+
+    function updateMeal(input) {
+        const key = input.getAttribute('data-key');
+        const type = input.getAttribute('data-type');
+        meals[type][key] = input.value;
+        saveData();
+    }
+
+    function clearJadesMeals() {
+        if (confirm('Clear all of Jade\'s meals? This cannot be undone.')) {
+            meals.jades = {};
+            saveData();
+            renderAll();
+        }
+    }
+
+    function clearHarveysMeals() {
+        if (confirm('Clear all of Harvey\'s meals? This cannot be undone.')) {
+            meals.harveys = {};
+            saveData();
+            renderAll();
+        }
+    }
+
+    function addShoppingItem() {
+        const name = document.getElementById('item-name').value.trim();
+        const qty = document.getElementById('item-qty').value.trim();
+        const unit = document.getElementById('item-unit').value.trim();
+
+        if (!name) {
+            alert('Please enter an item name');
+            return;
+        }
+
+        const item = {
+            id: Date.now(),
+            name: name,
+            qty: qty || '1',
+            unit: unit || 'unit'
+        };
+
+        meals.shopping.push(item);
+        saveData();
+        renderAll();
+
+        // Clear inputs
+        document.getElementById('item-name').value = '';
+        document.getElementById('item-qty').value = '';
+        document.getElementById('item-unit').value = '';
+        document.getElementById('item-name').focus();
+    }
+
+    function removeShoppingItem(id) {
+        meals.shopping = meals.shopping.filter(item => item.id !== id);
+        saveData();
+        renderAll();
+    }
+
+    function renderShoppingList() {
+        const container = document.getElementById('shopping-list');
+        
+        if (meals.shopping.length === 0) {
+            container.innerHTML = '<div class="empty-state"><p>No items yet.</p></div>';
+            return;
+        }
+
+        container.innerHTML = '';
+        meals.shopping.forEach(item => {
+            const html = `
+                <div class="shopping-item">
+                    <div>
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-qty">${item.qty} ${item.unit}</div>
+                    </div>
+                    <button style="background: #ffcccc; color: #c00; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600;" onclick="removeShoppingItem(${item.id})">Remove</button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    function renderWoolworthsList() {
+        const container = document.getElementById('woolworths-list');
+        
+        if (meals.shopping.length === 0) {
+            container.innerHTML = '<div class="empty-state"><p>No items in shopping list yet.</p></div>';
+            return;
+        }
+
+        container.innerHTML = '';
+        meals.shopping.forEach(item => {
+            const searchUrl = `https://www.woolworths.com.au/shop/search/products?searchTerm=${encodeURIComponent(item.name)}`;
+            const html = `
+                <div class="shopping-item">
+                    <div>
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-qty">${item.qty} ${item.unit}</div>
+                    </div>
+                    <a href="${searchUrl}" target="_blank" class="woolworths-link">Search Woolworths</a>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    function clearShoppingList() {
+        if (confirm('Clear entire shopping list?')) {
+            meals.shopping = [];
+            saveData();
+            renderAll();
+        }
+    }
+
+    function openTab(evt, tabName) {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById(tabName).classList.add('active');
+        evt.currentTarget.classList.add('active');
+        
+        window.scrollTo(0, 0);
+    }
+
+    // Initial load
+    loadData();
+</script>
+
+</body>
+</html>
